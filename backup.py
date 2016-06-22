@@ -22,13 +22,18 @@ def oauth2_authorize_application(client_secret_file, scope, credential_cache_fil
                                    scope=scope)
     storage = Storage(credential_cache_file)
     credentials = storage.get()
-    if credentials == None:
-        credentials = tools.run_flow(FLOW, storage, tools.argparser.parse_args([]))
+    parser = argparse.ArgumentParser(parents=[tools.argparser])
+    argv = ['--noauth_local_webserver']
+    flags = parser.parse_args(argv)
+    if credentials == None or credentials.invalid:
+        credentials = tools.run_flow(FLOW, storage, flags)
     return credentials
 
 def main():
+    global args
     parser = argparse.ArgumentParser(description='Backup google contacts')
     parser.add_argument('-a', '--account', dest='account', help='account name', required=True)
+    parser.add_argument('--noauth_local_webserver', action='store_true')
     args = parser.parse_args()
 
     SCOPES = ['https://www.google.com/m8/feeds/', 'https://www.googleapis.com/auth/userinfo.email']
