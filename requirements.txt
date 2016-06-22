@@ -1,0 +1,4 @@
+gdata
+oauth2client
+vobject
+argparse
