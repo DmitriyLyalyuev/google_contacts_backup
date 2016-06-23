@@ -23,7 +23,10 @@ def oauth2_authorize_application(client_secret_file, scope, credential_cache_fil
     storage = Storage(credential_cache_file)
     credentials = storage.get()
     parser = argparse.ArgumentParser(parents=[tools.argparser])
-    argv = ['--noauth_local_webserver']
+    if args.noauth_local_webserver:
+        argv = ['--noauth_local_webserver']
+    else:
+        argv = ''
     flags = parser.parse_args(argv)
     if credentials == None or credentials.invalid:
         credentials = tools.run_flow(FLOW, storage, flags)
